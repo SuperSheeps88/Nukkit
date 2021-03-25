@@ -19,6 +19,7 @@ import cn.nukkit.event.level.LevelLoadEvent;
 import cn.nukkit.event.server.BatchPacketsEvent;
 import cn.nukkit.event.server.PlayerDataSerializeEvent;
 import cn.nukkit.event.server.QueryRegenerateEvent;
+import cn.nukkit.event.server.ServerStopEvent;
 import cn.nukkit.inventory.CraftingManager;
 import cn.nukkit.inventory.Recipe;
 import cn.nukkit.item.Item;
@@ -831,6 +832,9 @@ public class Server {
 
             this.hasStopped = true;
 
+            ServerStopEvent serverStopEvent = new ServerStopEvent();
+            getPluginManager().callEvent(serverStopEvent);
+
             if (this.rcon != null) {
                 this.rcon.close();
             }
@@ -1474,7 +1478,11 @@ public class Server {
     }
 
     public String getSubMotd() {
-        return this.getPropertyString("sub-motd", "https://nukkitx.com");
+        String subMotd = this.getPropertyString("sub-motd", "https://nukkitx.com");
+        if (subMotd.isEmpty()) {
+            subMotd = "https://nukkitx.com"; // The client doesn't allow empty sub-motd in 1.16.210
+        }
+        return subMotd;
     }
 
     public boolean getForceResources() {
