@@ -305,4 +305,6 @@ public interface BlockID {
     int PISTON_EXTENSION = 250;
 
     int OBSERVER = 251;
+
+    int NETHERITE_BLOCK = 252;
 }
